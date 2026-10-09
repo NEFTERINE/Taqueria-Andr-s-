@@ -1,0 +1,2 @@
+import { Menu } from 'lucide-react';
+export default function Header({titulo,setMenuAbierto}){return <header className="topbar"><button className="mobile-menu" onClick={()=>setMenuAbierto(true)} aria-label="Abrir menú"><Menu size={21}/></button><div className="breadcrumb">Taquería Andrés <span>/</span> <b>{titulo}</b></div><div className="top-user"><div className="status-dot"/> Sistema de administración <div className="avatar small">A</div></div></header>}
