@@ -12,6 +12,19 @@ Proyecto de interfaz construido con React y Vite. El código está separado por 
 npm install
 npm run dev
 ```
+Para el servidor
+
+4. Cambiar al directorio del servidor "backend".
+5. Instalar dependencias.
+6. Agregar variables de entorno .env.
+7. En la terminal ejecuta:
+
+```bash
+cd backend
+npm init -y
+npm install express pg bcrypt jsonwebtoken cors dotenv
+node server.js
+```
 
 ## Organización
 
