@@ -1,745 +1,324 @@
---
--- PostgreSQL database dump
---
-
-\restrict iGXChLoyAUHlpuO4lZBBXbNsTVTh8v7vCZNl4rV51VSlxYgj6Tvq6pqca0frlZD
-
--- Dumped from database version 18.6
--- Dumped by pg_dump version 18.6
-
--- Started on 2026-10-07 18:25:48
-
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET transaction_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
-SET default_tablespace = '';
-
-SET default_table_access_method = heap;
-
---
--- TOC entry 224 (class 1259 OID 16405)
--- Name: inventario; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.inventario (
-    pk_inventario integer NOT NULL,
-    nombre_producto character varying(40) NOT NULL,
-    precio numeric(5,2) NOT NULL,
-    estatus smallint
-);
-
-
-ALTER TABLE public.inventario OWNER TO postgres;
-
---
--- TOC entry 223 (class 1259 OID 16404)
--- Name: inventario_pk_inventario_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.inventario_pk_inventario_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.inventario_pk_inventario_seq OWNER TO postgres;
-
---
--- TOC entry 5083 (class 0 OID 0)
--- Dependencies: 223
--- Name: inventario_pk_inventario_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.inventario_pk_inventario_seq OWNED BY public.inventario.pk_inventario;
-
-
---
--- TOC entry 222 (class 1259 OID 16395)
--- Name: permiso; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.permiso (
-    pk_permiso integer NOT NULL,
-    nombre_permiso character varying(20) NOT NULL,
-    modulo character varying(20) NOT NULL,
-    estatus smallint
-);
-
-
-ALTER TABLE public.permiso OWNER TO postgres;
-
---
--- TOC entry 221 (class 1259 OID 16394)
--- Name: permiso_pk_permiso_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.permiso_pk_permiso_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.permiso_pk_permiso_seq OWNER TO postgres;
-
---
--- TOC entry 5084 (class 0 OID 0)
--- Dependencies: 221
--- Name: permiso_pk_permiso_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.permiso_pk_permiso_seq OWNED BY public.permiso.pk_permiso;
-
-
---
--- TOC entry 220 (class 1259 OID 16386)
--- Name: rol; Type: TABLE; Schema: public; Owner: postgres
---
+--* Creación de tablas principales
 
 CREATE TABLE public.rol (
-    pk_rol integer NOT NULL,
-    nombre_rol character varying(20) NOT NULL,
-    estatus smallint
+    pk_rol SERIAL PRIMARY KEY,
+    nombre_rol VARCHAR(20) NOT NULL UNIQUE,
+    estatus SMALLINT DEFAULT 1
 );
 
-
-ALTER TABLE public.rol OWNER TO postgres;
-
---
--- TOC entry 231 (class 1259 OID 16487)
--- Name: rol_permiso; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.rol_permiso (
-    pk_rol_permiso integer NOT NULL,
-    fk_rol integer NOT NULL,
-    fk_permiso integer NOT NULL
+CREATE TABLE public.permiso (
+    pk_permiso SERIAL PRIMARY KEY,
+    nombre_permiso VARCHAR(50) NOT NULL, -- Aumenté tamaño por nombres más descriptivos
+    modulo VARCHAR(30) NOT NULL,
+    estatus SMALLINT DEFAULT 1
 );
-
-
-ALTER TABLE public.rol_permiso OWNER TO postgres;
-
---
--- TOC entry 230 (class 1259 OID 16486)
--- Name: rol_permiso_fk_permiso_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.rol_permiso_fk_permiso_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.rol_permiso_fk_permiso_seq OWNER TO postgres;
-
---
--- TOC entry 5085 (class 0 OID 0)
--- Dependencies: 230
--- Name: rol_permiso_fk_permiso_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.rol_permiso_fk_permiso_seq OWNED BY public.rol_permiso.fk_permiso;
-
-
---
--- TOC entry 229 (class 1259 OID 16485)
--- Name: rol_permiso_fk_rol_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.rol_permiso_fk_rol_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.rol_permiso_fk_rol_seq OWNER TO postgres;
-
---
--- TOC entry 5086 (class 0 OID 0)
--- Dependencies: 229
--- Name: rol_permiso_fk_rol_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.rol_permiso_fk_rol_seq OWNED BY public.rol_permiso.fk_rol;
-
-
---
--- TOC entry 228 (class 1259 OID 16484)
--- Name: rol_permiso_pk_rol_permiso_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.rol_permiso_pk_rol_permiso_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.rol_permiso_pk_rol_permiso_seq OWNER TO postgres;
-
---
--- TOC entry 5087 (class 0 OID 0)
--- Dependencies: 228
--- Name: rol_permiso_pk_rol_permiso_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.rol_permiso_pk_rol_permiso_seq OWNED BY public.rol_permiso.pk_rol_permiso;
-
-
---
--- TOC entry 219 (class 1259 OID 16385)
--- Name: rol_pk_rol_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.rol_pk_rol_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.rol_pk_rol_seq OWNER TO postgres;
-
---
--- TOC entry 5088 (class 0 OID 0)
--- Dependencies: 219
--- Name: rol_pk_rol_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.rol_pk_rol_seq OWNED BY public.rol.pk_rol;
-
-
---
--- TOC entry 227 (class 1259 OID 16467)
--- Name: usuario; Type: TABLE; Schema: public; Owner: postgres
---
 
 CREATE TABLE public.usuario (
-    pk_usuario integer NOT NULL,
-    nombre_completo character varying(45) NOT NULL,
-    nombre_usuario character varying(15) NOT NULL,
-    contrasena character varying(20) NOT NULL,
-    estatus smallint,
-    fk_rol integer NOT NULL
+    pk_usuario SERIAL PRIMARY KEY,
+    nombre_completo VARCHAR(60) NOT NULL, -- Aumenté tamaño para nombres largos
+    nombre_usuario VARCHAR(15) NOT NULL UNIQUE,
+    contrasena VARCHAR(255) NOT NULL, -- Listo para almacenar hashes (bcrypt)
+    estatus SMALLINT DEFAULT 1,
+    fk_rol INTEGER NOT NULL REFERENCES public.rol(pk_rol)
 );
 
+CREATE TABLE public.inventario (
+    pk_inventario SERIAL PRIMARY KEY,
+    nombre_producto VARCHAR(40) NOT NULL UNIQUE,
+    descripcion VARCHAR(120) NOT NULL, -- Aumenté tamaño para descripciones más detalladas
+    precio NUMERIC(5,2) NOT NULL CHECK (precio >= 0), -- 5 dígitos en total (ej. de 0.00 a 999.99)
+    estatus SMALLINT DEFAULT 1
+);
 
-ALTER TABLE public.usuario OWNER TO postgres;
-
---
--- TOC entry 226 (class 1259 OID 16466)
--- Name: usuario_fk_rol_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.usuario_fk_rol_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.usuario_fk_rol_seq OWNER TO postgres;
-
---
--- TOC entry 5089 (class 0 OID 0)
--- Dependencies: 226
--- Name: usuario_fk_rol_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.usuario_fk_rol_seq OWNED BY public.usuario.fk_rol;
-
-
---
--- TOC entry 235 (class 1259 OID 16544)
--- Name: usuario_permiso; Type: TABLE; Schema: public; Owner: postgres
---
+CREATE TABLE public.rol_permiso (
+    pk_rol_permiso SERIAL PRIMARY KEY,
+    fk_rol INTEGER NOT NULL REFERENCES public.rol(pk_rol) ON DELETE CASCADE,
+    fk_permiso INTEGER NOT NULL REFERENCES public.permiso(pk_permiso) ON DELETE CASCADE
+);
 
 CREATE TABLE public.usuario_permiso (
-    pk_usuario_permiso integer NOT NULL,
-    fk_usuario integer NOT NULL,
-    fk_permiso integer NOT NULL
+    pk_usuario_permiso SERIAL PRIMARY KEY,
+    fk_usuario INTEGER NOT NULL REFERENCES public.usuario(pk_usuario) ON DELETE CASCADE,
+    fk_permiso INTEGER NOT NULL REFERENCES public.permiso(pk_permiso) ON DELETE CASCADE
 );
 
-
-ALTER TABLE public.usuario_permiso OWNER TO postgres;
-
---
--- TOC entry 234 (class 1259 OID 16543)
--- Name: usuario_permiso_fk_permiso_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.usuario_permiso_fk_permiso_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.usuario_permiso_fk_permiso_seq OWNER TO postgres;
-
---
--- TOC entry 5090 (class 0 OID 0)
--- Dependencies: 234
--- Name: usuario_permiso_fk_permiso_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.usuario_permiso_fk_permiso_seq OWNED BY public.usuario_permiso.fk_permiso;
-
-
---
--- TOC entry 233 (class 1259 OID 16542)
--- Name: usuario_permiso_fk_usuario_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.usuario_permiso_fk_usuario_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.usuario_permiso_fk_usuario_seq OWNER TO postgres;
-
---
--- TOC entry 5091 (class 0 OID 0)
--- Dependencies: 233
--- Name: usuario_permiso_fk_usuario_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.usuario_permiso_fk_usuario_seq OWNED BY public.usuario_permiso.fk_usuario;
-
-
---
--- TOC entry 232 (class 1259 OID 16541)
--- Name: usuario_permiso_pk_usuario_permiso_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.usuario_permiso_pk_usuario_permiso_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.usuario_permiso_pk_usuario_permiso_seq OWNER TO postgres;
-
---
--- TOC entry 5092 (class 0 OID 0)
--- Dependencies: 232
--- Name: usuario_permiso_pk_usuario_permiso_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.usuario_permiso_pk_usuario_permiso_seq OWNED BY public.usuario_permiso.pk_usuario_permiso;
-
-
---
--- TOC entry 225 (class 1259 OID 16465)
--- Name: usuario_pk_usuario_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public.usuario_pk_usuario_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public.usuario_pk_usuario_seq OWNER TO postgres;
-
---
--- TOC entry 5093 (class 0 OID 0)
--- Dependencies: 225
--- Name: usuario_pk_usuario_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public.usuario_pk_usuario_seq OWNED BY public.usuario.pk_usuario;
-
-
---
--- TOC entry 4888 (class 2604 OID 16408)
--- Name: inventario pk_inventario; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.inventario ALTER COLUMN pk_inventario SET DEFAULT nextval('public.inventario_pk_inventario_seq'::regclass);
-
-
---
--- TOC entry 4887 (class 2604 OID 16398)
--- Name: permiso pk_permiso; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.permiso ALTER COLUMN pk_permiso SET DEFAULT nextval('public.permiso_pk_permiso_seq'::regclass);
-
-
---
--- TOC entry 4886 (class 2604 OID 16389)
--- Name: rol pk_rol; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.rol ALTER COLUMN pk_rol SET DEFAULT nextval('public.rol_pk_rol_seq'::regclass);
-
-
---
--- TOC entry 4891 (class 2604 OID 16490)
--- Name: rol_permiso pk_rol_permiso; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.rol_permiso ALTER COLUMN pk_rol_permiso SET DEFAULT nextval('public.rol_permiso_pk_rol_permiso_seq'::regclass);
-
-
---
--- TOC entry 4892 (class 2604 OID 16491)
--- Name: rol_permiso fk_rol; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.rol_permiso ALTER COLUMN fk_rol SET DEFAULT nextval('public.rol_permiso_fk_rol_seq'::regclass);
-
-
---
--- TOC entry 4893 (class 2604 OID 16492)
--- Name: rol_permiso fk_permiso; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.rol_permiso ALTER COLUMN fk_permiso SET DEFAULT nextval('public.rol_permiso_fk_permiso_seq'::regclass);
-
-
---
--- TOC entry 4889 (class 2604 OID 16470)
--- Name: usuario pk_usuario; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.usuario ALTER COLUMN pk_usuario SET DEFAULT nextval('public.usuario_pk_usuario_seq'::regclass);
-
-
---
--- TOC entry 4890 (class 2604 OID 16471)
--- Name: usuario fk_rol; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.usuario ALTER COLUMN fk_rol SET DEFAULT nextval('public.usuario_fk_rol_seq'::regclass);
-
-
---
--- TOC entry 4894 (class 2604 OID 16547)
--- Name: usuario_permiso pk_usuario_permiso; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.usuario_permiso ALTER COLUMN pk_usuario_permiso SET DEFAULT nextval('public.usuario_permiso_pk_usuario_permiso_seq'::regclass);
-
-
---
--- TOC entry 4895 (class 2604 OID 16548)
--- Name: usuario_permiso fk_usuario; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.usuario_permiso ALTER COLUMN fk_usuario SET DEFAULT nextval('public.usuario_permiso_fk_usuario_seq'::regclass);
-
-
---
--- TOC entry 4896 (class 2604 OID 16549)
--- Name: usuario_permiso fk_permiso; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.usuario_permiso ALTER COLUMN fk_permiso SET DEFAULT nextval('public.usuario_permiso_fk_permiso_seq'::regclass);
-
-
---
--- TOC entry 5066 (class 0 OID 16405)
--- Dependencies: 224
--- Data for Name: inventario; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.inventario (pk_inventario, nombre_producto, precio, estatus) FROM stdin;
-\.
-
-
---
--- TOC entry 5064 (class 0 OID 16395)
--- Dependencies: 222
--- Data for Name: permiso; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.permiso (pk_permiso, nombre_permiso, modulo, estatus) FROM stdin;
-\.
-
-
---
--- TOC entry 5062 (class 0 OID 16386)
--- Dependencies: 220
--- Data for Name: rol; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.rol (pk_rol, nombre_rol, estatus) FROM stdin;
-\.
-
-
---
--- TOC entry 5073 (class 0 OID 16487)
--- Dependencies: 231
--- Data for Name: rol_permiso; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.rol_permiso (pk_rol_permiso, fk_rol, fk_permiso) FROM stdin;
-\.
-
-
---
--- TOC entry 5069 (class 0 OID 16467)
--- Dependencies: 227
--- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.usuario (pk_usuario, nombre_completo, nombre_usuario, contrasena, estatus, fk_rol) FROM stdin;
-\.
-
-
---
--- TOC entry 5077 (class 0 OID 16544)
--- Dependencies: 235
--- Data for Name: usuario_permiso; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.usuario_permiso (pk_usuario_permiso, fk_usuario, fk_permiso) FROM stdin;
-\.
-
-
---
--- TOC entry 5094 (class 0 OID 0)
--- Dependencies: 223
--- Name: inventario_pk_inventario_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.inventario_pk_inventario_seq', 1, false);
-
-
---
--- TOC entry 5095 (class 0 OID 0)
--- Dependencies: 221
--- Name: permiso_pk_permiso_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.permiso_pk_permiso_seq', 1, false);
-
-
---
--- TOC entry 5096 (class 0 OID 0)
--- Dependencies: 230
--- Name: rol_permiso_fk_permiso_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.rol_permiso_fk_permiso_seq', 1, false);
-
-
---
--- TOC entry 5097 (class 0 OID 0)
--- Dependencies: 229
--- Name: rol_permiso_fk_rol_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.rol_permiso_fk_rol_seq', 1, false);
-
-
---
--- TOC entry 5098 (class 0 OID 0)
--- Dependencies: 228
--- Name: rol_permiso_pk_rol_permiso_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.rol_permiso_pk_rol_permiso_seq', 1, false);
-
-
---
--- TOC entry 5099 (class 0 OID 0)
--- Dependencies: 219
--- Name: rol_pk_rol_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.rol_pk_rol_seq', 1, false);
-
-
---
--- TOC entry 5100 (class 0 OID 0)
--- Dependencies: 226
--- Name: usuario_fk_rol_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.usuario_fk_rol_seq', 1, false);
-
-
---
--- TOC entry 5101 (class 0 OID 0)
--- Dependencies: 234
--- Name: usuario_permiso_fk_permiso_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.usuario_permiso_fk_permiso_seq', 1, false);
-
-
---
--- TOC entry 5102 (class 0 OID 0)
--- Dependencies: 233
--- Name: usuario_permiso_fk_usuario_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.usuario_permiso_fk_usuario_seq', 1, false);
-
-
---
--- TOC entry 5103 (class 0 OID 0)
--- Dependencies: 232
--- Name: usuario_permiso_pk_usuario_permiso_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.usuario_permiso_pk_usuario_permiso_seq', 1, false);
-
-
---
--- TOC entry 5104 (class 0 OID 0)
--- Dependencies: 225
--- Name: usuario_pk_usuario_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.usuario_pk_usuario_seq', 1, false);
-
-
---
--- TOC entry 4902 (class 2606 OID 16413)
--- Name: inventario inventario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.inventario
-    ADD CONSTRAINT inventario_pkey PRIMARY KEY (pk_inventario);
-
-
---
--- TOC entry 4900 (class 2606 OID 16403)
--- Name: permiso permiso_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.permiso
-    ADD CONSTRAINT permiso_pkey PRIMARY KEY (pk_permiso);
-
-
---
--- TOC entry 4906 (class 2606 OID 16497)
--- Name: rol_permiso rol_permiso_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.rol_permiso
-    ADD CONSTRAINT rol_permiso_pkey PRIMARY KEY (pk_rol_permiso);
-
-
---
--- TOC entry 4898 (class 2606 OID 16393)
--- Name: rol rol_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.rol
-    ADD CONSTRAINT rol_pkey PRIMARY KEY (pk_rol);
-
-
---
--- TOC entry 4908 (class 2606 OID 16554)
--- Name: usuario_permiso usuario_permiso_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.usuario_permiso
-    ADD CONSTRAINT usuario_permiso_pkey PRIMARY KEY (pk_usuario_permiso);
-
-
---
--- TOC entry 4904 (class 2606 OID 16478)
--- Name: usuario usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.usuario
-    ADD CONSTRAINT usuario_pkey PRIMARY KEY (pk_usuario);
-
-
---
--- TOC entry 4910 (class 2606 OID 16503)
--- Name: rol_permiso fk_permiso; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.rol_permiso
-    ADD CONSTRAINT fk_permiso FOREIGN KEY (fk_permiso) REFERENCES public.permiso(pk_permiso);
-
-
---
--- TOC entry 4912 (class 2606 OID 16560)
--- Name: usuario_permiso fk_permiso; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.usuario_permiso
-    ADD CONSTRAINT fk_permiso FOREIGN KEY (fk_permiso) REFERENCES public.permiso(pk_permiso);
-
-
---
--- TOC entry 4911 (class 2606 OID 16498)
--- Name: rol_permiso fk_rol; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.rol_permiso
-    ADD CONSTRAINT fk_rol FOREIGN KEY (fk_rol) REFERENCES public.rol(pk_rol);
-
-
---
--- TOC entry 4909 (class 2606 OID 16479)
--- Name: usuario fk_rol; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.usuario
-    ADD CONSTRAINT fk_rol FOREIGN KEY (fk_rol) REFERENCES public.rol(pk_rol);
-
-
---
--- TOC entry 4913 (class 2606 OID 16555)
--- Name: usuario_permiso fk_usuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.usuario_permiso
-    ADD CONSTRAINT fk_usuario FOREIGN KEY (fk_usuario) REFERENCES public.usuario(pk_usuario);
-
-
--- Completed on 2026-10-07 18:25:48
-
---
--- PostgreSQL database dump complete
---
-
-\unrestrict iGXChLoyAUHlpuO4lZBBXbNsTVTh8v7vCZNl4rV51VSlxYgj6Tvq6pqca0frlZD
-
+--* --------------------------------------------------------
+--? INSERCIONES PRIMARIAS PARA EL FUNCIONAMIENTO DEL SISTEMA
+--* --------------------------------------------------------
+
+-- 1. Insertar los Roles definidos en la entrevista
+INSERT INTO public.rol (nombre_rol) VALUES
+('Administrador'),
+('Mesero'),
+('Cocinero');
+
+-- 2. Insertar los Permisos basados en las acciones requeridas
+INSERT INTO public.permiso (nombre_permiso, modulo) VALUES
+-- Módulo Usuarios
+('Gestionar Usuarios (Crear, Editar, Activar)', 'Usuarios'),
+('Ver Usuarios', 'Usuarios'),
+
+-- Módulo Inventario
+('Gestionar Productos (Crear, Editar)', 'Inventario'),
+('Ver Productos', 'Inventario'),
+
+-- Módulo Caja/Gastos
+('Abrir/Cerrar Caja y Cortes', 'Caja'),
+('Registrar Gastos del Día', 'Caja'),
+
+-- Módulo Ventas/Pedidos
+('Registrar y Editar Pedidos', 'Ventas'),
+('Cobrar Pedidos', 'Ventas'),
+('Ver Historial de Ventas', 'Ventas'),
+('Ver y Gestionar Pedidos en Cocina', 'Cocina'),
+
+-- Módulo Reportes
+('Ver Reportes (Ganancias, Tiempos, Consumo)', 'Reportes');
+
+
+-- 3. Asignar Permisos a los Roles (Valores por Defecto)
+
+-- Asignar TODOS los permisos al Administrador (Rol 1)
+INSERT INTO public.rol_permiso (fk_rol, fk_permiso)
+SELECT 1, pk_permiso FROM public.permiso;
+
+-- Asignar permisos al Mesero (Rol 2)
+INSERT INTO public.rol_permiso (fk_rol, fk_permiso) VALUES
+(2, (SELECT pk_permiso FROM public.permiso WHERE nombre_permiso = 'Registrar y Editar Pedidos')),
+(2, (SELECT pk_permiso FROM public.permiso WHERE nombre_permiso = 'Cobrar Pedidos')),
+-- (2, (SELECT pk_permiso FROM public.permiso WHERE nombre_permiso = 'Registrar Gastos del Día')),
+-- (2, (SELECT pk_permiso FROM public.permiso WHERE nombre_permiso = 'Abrir/Cerrar Caja y Cortes'))
+;
+
+-- Asignar permisos al Cocinero (Rol 3)
+INSERT INTO public.rol_permiso (fk_rol, fk_permiso) VALUES
+(3, (SELECT pk_permiso FROM public.permiso WHERE nombre_permiso = 'Ver y Gestionar Pedidos en Cocina'));
+
+
+-- 4. Crear el usuario Administrador inicial
+-- RECORDATORIO: En producción, la contraseña DEBE ser un hash de bcrypt.
+-- Aquí uso '$2b$10$wY9/w.r/Q./..' como representación de un hash para 'admin123'
+INSERT INTO public.usuario (nombre_completo, nombre_usuario, contrasena, fk_rol)
+VALUES ('Jefe Taquería', 'admin', '$2b$10$ISn1FbZeKMQAKNUBSzkV4OpqtNEEg8OupBo9/0qW/FSriD3caDNua', 1);
+
+
+--* --------------------------------------------------------
+--? FUNCIONES Y TRIGGERS DE VALIDACIÓN Y SEGURIDAD
+--* --------------------------------------------------------
+
+-- Validar creación/edición de usuario
+CREATE OR REPLACE FUNCTION trg_validar_usuario()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF LENGTH(TRIM(NEW.nombre_usuario)) < 3 THEN
+        RAISE EXCEPTION 'El nombre de usuario debe tener al menos 3 caracteres.';
+    END IF;
+    -- Verificación básica para asegurar que se está guardando un hash (los hashes bcrypt suelen empezar con $2)
+    IF NEW.contrasena NOT LIKE '$2%' THEN
+        RAISE EXCEPTION 'Error de seguridad: La contraseña debe ser procesada (hasheada) antes de guardarse.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_antes_guardar_usuario
+BEFORE INSERT OR UPDATE ON public.usuario
+FOR EACH ROW EXECUTE FUNCTION trg_validar_usuario();
+
+-- Validar precios en el inventario (no permitir precios negativos)
+CREATE OR REPLACE FUNCTION trg_validar_precio_inventario()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.precio < 0 THEN
+        RAISE EXCEPTION 'El precio del producto no puede ser negativo.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_antes_guardar_inventario
+BEFORE INSERT OR UPDATE ON public.inventario
+FOR EACH ROW EXECUTE FUNCTION trg_validar_precio_inventario();
+
+-- Procedimiento Almacenado de ejemplo para obtener los permisos reales de un usuario
+-- Combina los permisos de su rol + los permisos individuales asignados
+CREATE OR REPLACE FUNCTION get_permisos_usuario(p_usuario_id INT)
+RETURNS TABLE (permiso_nombre VARCHAR) AS $$
+BEGIN
+    RETURN QUERY
+    -- Permisos que vienen de su Rol
+    SELECT p.nombre_permiso
+    FROM public.usuario u
+    JOIN public.rol_permiso rp ON u.fk_rol = rp.fk_rol
+    JOIN public.permiso p ON rp.fk_permiso = p.pk_permiso
+    WHERE u.pk_usuario = p_usuario_id
+    UNION
+    -- Permisos adicionales individuales (excepciones)
+    SELECT p.nombre_permiso
+    FROM public.usuario_permiso up
+    JOIN public.permiso p ON up.fk_permiso = p.pk_permiso
+    WHERE up.fk_usuario = p_usuario_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+--* =====================================================================
+--? PROCEDIMIENTOS ALMACENADOS Y FUNCIONES PARA USUARIOS
+--* =====================================================================
+
+-- 1. Función para Leer Usuarios (Trae el nombre del rol en vez de su ID numérico)
+CREATE OR REPLACE FUNCTION fn_obtener_usuarios()
+RETURNS TABLE (
+    id_usuario INT,
+    nombre_completo VARCHAR,
+    nombre_usuario VARCHAR,
+    rol VARCHAR,
+    estatus VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        u.pk_usuario,
+        u.nombre_completo,
+        u.nombre_usuario,
+        r.nombre_rol,
+        CASE WHEN u.estatus = 1 THEN 'Activo' ELSE 'Inactivo' END::VARCHAR
+    FROM public.usuario u
+    JOIN public.rol r ON u.fk_rol = r.pk_rol
+    ORDER BY u.pk_usuario DESC;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 2. Función para Insertar Usuario (Devuelve el ID generado)
+CREATE OR REPLACE FUNCTION fn_crear_usuario(
+    p_nombre_completo VARCHAR,
+    p_nombre_usuario VARCHAR,
+    p_contrasena VARCHAR,
+    p_nombre_rol VARCHAR
+) RETURNS INT AS $$
+DECLARE
+    v_fk_rol INT;
+    v_nuevo_id INT;
+BEGIN
+    -- Obtenemos la llave foránea (FK) del rol usando su nombre ('Mesero', 'Administrador'...)
+    SELECT pk_rol INTO v_fk_rol FROM public.rol WHERE nombre_rol = p_nombre_rol;
+    
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Error: El rol % no existe.', p_nombre_rol;
+    END IF;
+
+    -- Insertamos al usuario
+    INSERT INTO public.usuario (nombre_completo, nombre_usuario, contrasena, fk_rol)
+    VALUES (p_nombre_completo, p_nombre_usuario, p_contrasena, v_fk_rol)
+    RETURNING pk_usuario INTO v_nuevo_id;
+
+    RETURN v_nuevo_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 3. Procedimiento para Editar Usuario (No edita la contraseña, solo datos y rol)
+CREATE OR REPLACE PROCEDURE sp_actualizar_usuario(
+    p_id INT,
+    p_nombre_completo VARCHAR,
+    p_nombre_rol VARCHAR
+) AS $$
+DECLARE
+    v_fk_rol INT;
+BEGIN
+    SELECT pk_rol INTO v_fk_rol FROM public.rol WHERE nombre_rol = p_nombre_rol;
+    
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Error: El rol % no existe.', p_nombre_rol;
+    END IF;
+
+    UPDATE public.usuario 
+    SET nombre_completo = p_nombre_completo,
+        fk_rol = v_fk_rol
+    WHERE pk_usuario = p_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 4. Procedimiento para Cambiar Estatus (Activar/Desactivar)
+CREATE OR REPLACE PROCEDURE sp_cambiar_estatus_usuario(
+    p_id INT
+) AS $$
+BEGIN
+    -- Si es 1 lo cambia a 0, si es 0 lo cambia a 1
+    UPDATE public.usuario 
+    SET estatus = CASE WHEN estatus = 1 THEN 0 ELSE 1 END
+    WHERE pk_usuario = p_id;
+END;
+$$ LANGUAGE plpgsql;
+
+
+--* =====================================================================
+--? PROCEDIMIENTOS ALMACENADOS Y FUNCIONES PARA INVENTARIO
+--* =====================================================================
+
+-- 1. Función para Leer Productos
+CREATE OR REPLACE FUNCTION fn_obtener_productos()
+RETURNS TABLE (
+    id_producto INT,
+    nombre VARCHAR,
+    descripcion VARCHAR,
+    precio NUMERIC(5,2),
+    estatus VARCHAR,
+    ventas INT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        pk_inventario,
+        nombre_producto,
+        i.descripcion,
+        i.precio,
+        CASE WHEN i.estatus = 1 THEN 'Activo' ELSE 'Inactivo' END::VARCHAR,
+        0 -- Este campo queda en 0 por ahora hasta que hagamos el módulo de Ventas
+    FROM public.inventario i
+    ORDER BY pk_inventario DESC;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 2. Función para Insertar Producto (Devuelve el ID generado)
+CREATE OR REPLACE FUNCTION fn_crear_producto(
+    p_nombre VARCHAR,
+    p_descripcion VARCHAR,
+    p_precio NUMERIC
+) RETURNS INT AS $$
+DECLARE
+    v_nuevo_id INT;
+BEGIN
+    INSERT INTO public.inventario (nombre_producto, descripcion, precio)
+    VALUES (p_nombre, p_descripcion, p_precio)
+    RETURNING pk_inventario INTO v_nuevo_id;
+    
+    RETURN v_nuevo_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 3. Procedimiento para Editar Producto
+CREATE OR REPLACE PROCEDURE sp_actualizar_producto(
+    p_id INT,
+    p_nombre VARCHAR,
+    p_descripcion VARCHAR,
+    p_precio NUMERIC
+) AS $$
+BEGIN
+    UPDATE public.inventario 
+    SET nombre_producto = p_nombre,
+        descripcion = p_descripcion,
+        precio = p_precio
+    WHERE pk_inventario = p_id;
+END;
+$$ LANGUAGE plpgsql;
+
+-- 4. Procedimiento para Cambiar Estatus (Activar/Desactivar)
+CREATE OR REPLACE PROCEDURE sp_cambiar_estatus_producto(
+    p_id INT
+) AS $$
+BEGIN
+    UPDATE public.inventario 
+    SET estatus = CASE WHEN estatus = 1 THEN 0 ELSE 1 END
+    WHERE pk_inventario = p_id;
+END;
+$$ LANGUAGE plpgsql;

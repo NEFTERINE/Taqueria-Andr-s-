@@ -1,0 +1,8 @@
+node_modules
+backend/generar.js
+backend/.env
+*.local
+
+# Compilados de Vite (Frontend) aunque no están en mi proyecto
+dist/
+dist-ssr/

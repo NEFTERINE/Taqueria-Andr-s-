@@ -1,8 +1,106 @@
 import { useState } from 'react';
-import { Eye, EyeOff, Utensils, LockKeyhole, UserRound } from 'lucide-react';
-export default function Login({onLogin}){
- const [usuario,setUsuario]=useState(''); const [contrasena,setContrasena]=useState(''); const [mostrar,setMostrar]=useState(false); const [error,setError]=useState('');
- function entrar(e){e.preventDefault();if(!usuario.trim()||!contrasena.trim()){setError('Escribe tu usuario y contraseña para continuar.');return}setError('');onLogin()}
- return <main className="login-page"><section className="login-brand-panel"><div className="login-brand"><div className="login-logo"><Utensils size={28}/></div><span>Taquería Andrés</span></div><div className="login-welcome"><span className="login-kicker">SISTEMA DE ADMINISTRACIÓN</span><h1>El control de tu negocio, en un solo lugar.</h1><p>Administra productos, personal y operaciones diarias de forma sencilla.</p><div className="login-decoration"><div className="decoration-circle circle-one"/><div className="decoration-circle circle-two"/><div className="decoration-card"><Utensils size={25}/><div><b>Taquería Andrés</b><small>Calidad y buen servicio</small></div></div></div></div><small className="login-copy">© 2026 Taquería Andrés</small></section>
- <section className="login-form-panel"><form className="login-form" onSubmit={entrar}><div className="login-mobile-logo"><div className="login-logo"><Utensils size={24}/></div><b>Taquería Andrés</b></div><span className="login-kicker">BIENVENIDO DE NUEVO</span><h2>Iniciar sesión</h2><p className="login-subtitle">Ingresa tus datos para acceder al sistema.</p><label htmlFor="usuario">Usuario o correo electrónico</label><div className="login-input-wrap"><UserRound size={18}/><input id="usuario" autoComplete="username" value={usuario} onChange={e=>setUsuario(e.target.value)} placeholder="Ingresa tu usuario"/></div><label htmlFor="contrasena">Contraseña</label><div className="login-input-wrap"><LockKeyhole size={18}/><input id="contrasena" type={mostrar?'text':'password'} autoComplete="current-password" value={contrasena} onChange={e=>setContrasena(e.target.value)} placeholder="Ingresa tu contraseña"/><button type="button" className="show-password" onClick={()=>setMostrar(!mostrar)} aria-label={mostrar?'Ocultar contraseña':'Mostrar contraseña'}>{mostrar?<EyeOff size={18}/>:<Eye size={18}/>}</button></div>{error&&<p className="login-error">{error}</p>}<button className="login-submit" type="submit">Entrar al sistema</button><p className="login-demo-note">Versión de demostración: puedes ingresar con cualquier usuario y contraseña no vacíos.</p></form><footer className="login-footer">¿Necesitas ayuda? Contacta al administrador del sistema.</footer></section></main>
+import { Eye, EyeOff, Utensils, LockKeyhole, UserRound, Loader2 } from 'lucide-react';
+
+export default function Login({ onLogin }) {
+  const [usuario, setUsuario] = useState('');
+  const [contrasena, setContrasena] = useState('');
+  const [mostrar, setMostrar] = useState(false);
+  const [error, setError] = useState('');
+  const [cargando, setCargando] = useState(false);
+
+  async function entrar(e) {
+    e.preventDefault();
+    if (!usuario.trim() || !contrasena.trim()) {
+      setError('Escribe tu usuario y contraseña para continuar.');
+      return;
+    }
+
+    setError('');
+    setCargando(true);
+
+    try {
+      // Hacemos la petición real al servidor backend
+      const respuesta = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre_usuario: usuario, contrasena: contrasena })
+      });
+
+      const data = await respuesta.json();
+
+      if (!respuesta.ok) {
+        throw new Error(data.mensaje || 'Error al iniciar sesión');
+      }
+
+      // Si fue exitoso, guardamos el token de seguridad en el navegador
+      localStorage.setItem('token', data.token);
+      
+      // Le pasamos los datos del usuario (id, nombre, rol) a la aplicación principal
+      onLogin(data.usuario);
+
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setCargando(false);
+    }
+  }
+
+  return (
+    <main className="login-page">
+      <section className="login-brand-panel">
+        <div className="login-brand">
+          <div className="login-logo"><Utensils size={28} /></div>
+          <span>Taquería Andrés</span>
+        </div>
+        <div className="login-welcome">
+          <span className="login-kicker">SISTEMA DE ADMINISTRACIÓN</span>
+          <h1>El control de tu negocio, en un solo lugar.</h1>
+          <p>Administra productos, personal y operaciones diarias de forma sencilla.</p>
+          <div className="login-decoration">
+            <div className="decoration-circle circle-one" />
+            <div className="decoration-circle circle-two" />
+            <div className="decoration-card">
+              <Utensils size={25} />
+              <div><b>Taquería Andrés</b><small>Calidad y buen servicio</small></div>
+            </div>
+          </div>
+        </div>
+        <small className="login-copy">© 2026 Taquería Andrés</small>
+      </section>
+
+      <section className="login-form-panel">
+        <form className="login-form" onSubmit={entrar}>
+          <div className="login-mobile-logo">
+            <div className="login-logo"><Utensils size={24} /></div>
+            <b>Taquería Andrés</b>
+          </div>
+          <span className="login-kicker">BIENVENIDO DE NUEVO</span>
+          <h2>Iniciar sesión</h2>
+          <p className="login-subtitle">Ingresa tus datos para acceder al sistema.</p>
+
+          <label htmlFor="usuario">Nombre de usuario</label>
+          <div className="login-input-wrap">
+            <UserRound size={18} />
+            <input id="usuario" autoComplete="username" value={usuario} onChange={e => setUsuario(e.target.value)} placeholder="Ej. admin" />
+          </div>
+
+          <label htmlFor="contrasena">Contraseña</label>
+          <div className="login-input-wrap">
+            <LockKeyhole size={18} />
+            <input id="contrasena" type={mostrar ? 'text' : 'password'} autoComplete="current-password" value={contrasena} onChange={e => setContrasena(e.target.value)} placeholder="Ingresa tu contraseña" />
+            <button type="button" className="show-password" onClick={() => setMostrar(!mostrar)} aria-label={mostrar ? 'Ocultar' : 'Mostrar'}>
+              {mostrar ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+
+          {error && <p className="login-error">{error}</p>}
+
+          <button className="login-submit" type="submit" disabled={cargando}>
+            {cargando ? 'Conectando...' : 'Entrar al sistema'}
+          </button>
+        </form>
+        <footer className="login-footer">¿Necesitas ayuda? Contacta al administrador del sistema.</footer>
+      </section>
+    </main>
+  );
 }
